@@ -21,6 +21,7 @@ CScript::CScript()
 
 CScript::~CScript()
 {
+	dm.UnBindWindow();
 	dm = NULL;
 }
 
@@ -119,7 +120,7 @@ void CScript::DealyRandTime(unsigned long minDeaySeconds=0, unsigned long maxDea
 int CScript::ExcludeTooNearPos(CString allpos, long minDistance, int type, CString& result)
 {
 	long strLength = 0;
-	minDistance = minDistance*minDistance;//Æ½·½×îĞ¡¾àÀë
+	minDistance = minDistance*minDistance;//å¹³æ–¹æœ€å°è·ç¦»
 	long dx2 = 0;
 	VARIANT x, y;
 	CString leftStr, rightStr, str;
@@ -204,14 +205,14 @@ int CScript::ExcludeTooNearPos(CString allpos, long minDistance, int type, CStri
 	do
 	{
 
-		for (int j = 0; j < maxCount; j++)//±éÀúËùÓĞÊı¾İ
+		for (int j = 0; j < maxCount; j++)//éå†æ‰€æœ‰æ•°æ®
 		{
 			IsSave = 0;
-			for (int i = 0; i <= maxSave; i++)//ºÍÒÑ¾­±£´æµÄÊı¾İ½øĞĞ¶Ô±È
+			for (int i = 0; i <= maxSave; i++)//å’Œå·²ç»ä¿å­˜çš„æ•°æ®è¿›è¡Œå¯¹æ¯”
 			{
-				dx2 = (SaveNumberX[i] - NumberX[j])*(SaveNumberX[i] - NumberX[j]) + (SaveNumberY[i] - NumberY[j])*(SaveNumberY[i] - NumberY[j]);//¾àÀëµÄÆ½·½
+				dx2 = (SaveNumberX[i] - NumberX[j])*(SaveNumberX[i] - NumberX[j]) + (SaveNumberY[i] - NumberY[j])*(SaveNumberY[i] - NumberY[j]);//è·ç¦»çš„å¹³æ–¹
 
-				if (dx2 > minDistance)//¾àÀëµÄÆ½·½´óÓÚÉè¶¨¾àÀëµÄÆ½·½
+				if (dx2 > minDistance)//è·ç¦»çš„å¹³æ–¹å¤§äºè®¾å®šè·ç¦»çš„å¹³æ–¹
 				{
 					IsSave = 1;
 				}
@@ -223,9 +224,9 @@ int CScript::ExcludeTooNearPos(CString allpos, long minDistance, int type, CStri
 				}
 			}
 
-			if (IsSave == 1)//Èç¹ûµ±Ç°Êı¾İÂú×ãÒªÇó£¬¾Í´æÏÂËü
+			if (IsSave == 1)//å¦‚æœå½“å‰æ•°æ®æ»¡è¶³è¦æ±‚ï¼Œå°±å­˜ä¸‹å®ƒ
 			{
-				maxSave++;//¼ÇÂ¼±£´æÊı¾İµÄ¸öÊı
+				maxSave++;//è®°å½•ä¿å­˜æ•°æ®çš„ä¸ªæ•°
 
 				SaveNumberX[maxSave] = NumberX[j];
 				SaveNumberY[maxSave] = NumberY[j];
@@ -238,7 +239,7 @@ int CScript::ExcludeTooNearPos(CString allpos, long minDistance, int type, CStri
 
 
 			}
-			else//·ñÔò¼ÇÂ¼²»·ûºÏÒªÇóµÄÊı¾İ¸öÊı
+			else//å¦åˆ™è®°å½•ä¸ç¬¦åˆè¦æ±‚çš„æ•°æ®ä¸ªæ•°
 			{
 
 				IsBreak++;
@@ -247,7 +248,7 @@ int CScript::ExcludeTooNearPos(CString allpos, long minDistance, int type, CStri
 
 		}
 
-	} while (IsBreak < maxCount);//×îÍâ²ãÑ­»·£¬Ö±µ½ËùÓĞÊı¾İ¶¼²»ĞĞ²ÅÍ£Ö¹
+	} while (IsBreak < maxCount);//æœ€å¤–å±‚å¾ªç¯ï¼Œç›´åˆ°æ‰€æœ‰æ•°æ®éƒ½ä¸è¡Œæ‰åœæ­¢
 
 	leftStr = leftStr.Left(leftStr.GetLength() - 1);
 	rightStr = rightStr.Left(rightStr.GetLength() - 1);
@@ -387,7 +388,7 @@ int CScript::AttackArea(long x1, long y1, long x2, long y2, long type, long* res
 int CScript::ClearAdvirtisment()
 {
 
-	dm.SetPath("\¹ã¸æÍ¼±ê");
+	dm.SetPath("\å¹¿å‘Šå›¾æ ‡");
 	CString pic_name;
 	VARIANT x, y;
 	pic_name = dm.MatchPicName("*.bmp");
@@ -398,7 +399,7 @@ int CScript::ClearAdvirtisment()
 			dm.MoveTo(x.lVal + 5, y.lVal + 5);
 			Dealy(20);
 			dm.LeftClick();
-			//WriteLog("·¢ÏÖ¹ã¸æ£¬³¢ÊÔÇå³ı", true, RGB(0xff, 0x00, 0x00), false);
+			//WriteLog("å‘ç°å¹¿å‘Šï¼Œå°è¯•æ¸…é™¤", true, RGB(0xff, 0x00, 0x00), false);
 			return 1;
 		}
 
@@ -411,7 +412,7 @@ int CScript::ClearAdvirtisment()
 int CScript::TownJudge()
 {
 	dm.SetPath(_T("\Pic\\others"));
-	//WriteLog(_T("µÈ´ı´å×¯½çÃæ"), true, RGB(0xff, 0x00, 0xff), false);
+	//WriteLog(_T("ç­‰å¾…æ‘åº„ç•Œé¢"), true, RGB(0xff, 0x00, 0xff), false);
 	int TownJudge_i = 0;
 	VARIANT x, y;
 	int ae_ret;
@@ -447,16 +448,16 @@ int CScript::TownJudge()
 		tji.Format("%d", 60 - TownJudge_i);
 		if (TownJudge_i % 5 == 0)
 		{
-			WriteLog(_T("¼ÓÔØ´å×¯ÖĞ,ÇëµÈ´ı£º") + tji + _T("s"));
+			WriteLog(_T("åŠ è½½æ‘åº„ä¸­,è¯·ç­‰å¾…ï¼š") + tji + _T("s"));
 		}
 		else
 		{
-			WriteLog(_T("¼ÓÔØ´å×¯ÖĞ,ÇëµÈ´ı£º"));
+			WriteLog(_T("åŠ è½½æ‘åº„ä¸­,è¯·ç­‰å¾…ï¼š"));
 		}
 		if (TownJudge_i >= 60)
 		{
 			scriptStateCode = ShouldRestart;
-			WriteLog(_T("Î´·¢ÏÖ´å×¯£¬³¢ÊÔÖØÆô"));
+			WriteLog(_T("æœªå‘ç°æ‘åº„ï¼Œå°è¯•é‡å¯"));
 			return 0;
 		}
 		if (scriptStateCode <= 0)
@@ -561,19 +562,19 @@ int CScript::CheckArmyNum(int* Ma_time)
 
 	if (x.lVal > 0)
 	{
-		M_time += _T("·ÖÖÓ");
+		M_time += _T("åˆ†é’Ÿ");
 	}
 	else
 	{
-		M_time += "Ãë";
+		M_time += "ç§’";
 	}
-	if (M_time.Find(_T("·ÖÖÓ")) != -1)
+	if (M_time.Find(_T("åˆ†é’Ÿ")) != -1)
 	{
-		time_str = M_time.Left(M_time.Find(_T("·ÖÖÓ")));
+		time_str = M_time.Left(M_time.Find(_T("åˆ†é’Ÿ")));
 	}
 	else
 	{
-		if (time_str != "0"&&M_time.Find("Ãë") != -1)
+		if (time_str != "0"&&M_time.Find("ç§’") != -1)
 		{
 			time_str = "1";
 		}
@@ -581,8 +582,8 @@ int CScript::CheckArmyNum(int* Ma_time)
 	*Ma_time = _ttoi(time_str);
 	ret_str.Format("%f", ret);
 	ret_str += "%";
-	//WriteLog(_T("[±øÓªÈË¿Ú]" + s + "(" + ret_str + ")[Ôì±øÊ±¼ä]" + M_time), true, RGB(0x00, 0x00, 0xff), false);
-	//WriteLog("[·¨Êõ] " + spells_str + " [²¿ÂäÔ®¾ü] " + clancastle_str + " [²¿Âä·¨Êõ] " + clan_spell, true, RGB(0x00, 0x00, 0xff), false);
+	//WriteLog(_T("[å…µè¥äººå£]" + s + "(" + ret_str + ")[é€ å…µæ—¶é—´]" + M_time), true, RGB(0x00, 0x00, 0xff), false);
+	//WriteLog("[æ³•æœ¯] " + spells_str + " [éƒ¨è½æ´å†›] " + clancastle_str + " [éƒ¨è½æ³•æœ¯] " + clan_spell, true, RGB(0x00, 0x00, 0xff), false);
 	if (_ttoi(coc.GetSingleSetting("RequestArmy")) == 1)
 	{
 		RequestHelp();
@@ -736,7 +737,7 @@ int CScript::MakeArmy()
 	armytype[27] = _ttoi(coc.GetSingleSetting("EarthquakeSpell"));
 	armytype[28] = _ttoi(coc.GetSingleSetting("HasteSpell"));
 	armytype[29] = _ttoi(coc.GetSingleSetting("SkeletonSpell"));
-	//**************Ôì±ø***************//
+	//**************é€ å…µ***************//
 	attackArmy.babarin = armytype[1];
 	attackArmy.archer = armytype[2];
 	attackArmy.giant = armytype[3];
@@ -992,7 +993,7 @@ int CScript::func_adb(CString f_input)
 		}
 		else
 		{
-			//WriteLog(_T("error:kill adb.exe False Çë¼ì²éAdb Â·¾¶£¡ "), true, RGB(0xff, 0x00, 0x00), false);
+			//WriteLog(_T("error:kill adb.exe False è¯·æ£€æŸ¥Adb è·¯å¾„ï¼ "), true, RGB(0xff, 0x00, 0x00), false);
 		}
 		adb.Start(path, strIp, 1);
 		adb.RunCmd(f_input);
@@ -1105,7 +1106,7 @@ int CScript::WaitForReturnHome()
 {
 	int AttackMinWaitTime = _ttoi(coc.GetSingleSetting("AttackMinWaitTime"));
 	VARIANT x, y;
-	//WriteLog("ÏÂ±øÍê³É£¬µÈ´ıÕ½¶·½áÊø", true, RGB(0x00, 0x00, 0xff), false);
+	//WriteLog("ä¸‹å…µå®Œæˆï¼Œç­‰å¾…æˆ˜æ–—ç»“æŸ", true, RGB(0x00, 0x00, 0xff), false);
 	long gt = 0, wt = 0, ot = 0;
 	long g = 0, w = 0, o = 0;
 	int  time1 = 0;
@@ -1132,7 +1133,7 @@ int CScript::WaitForReturnHome()
 			if (time1 % 2 == 0)
 			{
 				str_t.Format("%d", AttackMinWaitTime - time1);
-				//WriteLog("Õ½¶·½«ÔÚ" + str_t + "Ãëºó½áÊø", true, RGB(0x00, 0x00, 0xff), false);
+				//WriteLog("æˆ˜æ–—å°†åœ¨" + str_t + "ç§’åç»“æŸ", true, RGB(0x00, 0x00, 0xff), false);
 			}
 
 		}
@@ -1156,7 +1157,7 @@ int CScript::WaitForReturnHome()
 					Dealy(2000);
 				}
 			}
-			//WriteLog("·µ»Ø´å×¯", true, RGB(0xff, 0x00, 0xff), true);
+			//WriteLog("è¿”å›æ‘åº„", true, RGB(0xff, 0x00, 0xff), true);
 			dm.MoveTo(x.lVal, y.lVal);
 			Dealy(20);
 			dm.LeftClick();
@@ -1218,7 +1219,7 @@ int CScript::Main_Attack()
 	AttackChangeDealy = 200;
 	AttackNextDealy = 2000;
 	dm.SetPath(_T("\Pic\\attack"));
-	//WriteLog(_T("¶¨Î»ÏÂ±øÎ»ÖÃ"));
+	//WriteLog(_T("å®šä½ä¸‹å…µä½ç½®"));
 	CString RedLineColor = "d45c21-0f900f";
 	CString show_str;
 	long ResourceX[4] = { 0 }, ResourceY[4] = { 0 };
@@ -1320,8 +1321,8 @@ int CScript::Main_Attack()
 			return 0;
 		}
 	}
-	//ºìÏß×ø±êÑ°ÕÒÍê³É
-	//WriteLog(_T("¶¨Î»Íê³É"));
+	//çº¢çº¿åæ ‡å¯»æ‰¾å®Œæˆ
+	//WriteLog(_T("å®šä½å®Œæˆ"));
 	Dealy(200);
 	VARIANT xg, yg;
 	int solider_num = 0;
@@ -1402,7 +1403,7 @@ int CScript::Main_Attack()
 		solider_num = SendXSolider(5);
 		if (solider_num > 0)
 		{
-			//WriteLog(_T("¸ç²¼ÁÖ"));
+			//WriteLog(_T("å“¥å¸ƒæ—"));
 			Dealy(50);
 			for (int i = 0; i <= solider_num / (4 - j); i++)
 			{
@@ -1454,21 +1455,21 @@ int CScript::Main_Attack()
 		{
 			return 0;
 		}
-		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//ÊÍ·Å Ô®¾ü
+		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//é‡Šæ”¾ æ´å†›
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÔ®¾ü"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			//WriteLog("é‡Šæ”¾æ´å†›"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 		dm.FindMultiColor(18, 568, 834, 617, "e7b463-0f0f0f", "21|13|e8a540-0f0f0f,-7|13|e0bf76-0f0f0f,4|9|e89268-0f0f0f,8|10|ea946e-0f0f0f", 0.9, 1, &xg, &yg);//bar barin king
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÂùÍõ"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			//WriteLog("é‡Šæ”¾è›®ç‹"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 
 		dm.FindMultiColor(18, 568, 834, 617, "6C4CB4-040404", "0|0|6C4CB4-040404,4|-1|7253BC-060704,-8|16|D59486-0B1012,7|15|E48A61-040202,8|12|F39A6E-030503,11|12|F4A074-040404,23|13|6C44B6-040202,26|21|6840B0,31|21|6C48BB-040303", 0.9, 1, &xg, &yg);//archer king
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÅ®Íõ");
+			//WriteLog("é‡Šæ”¾å¥³ç‹");
 			dm.MoveTo(xg.lVal, yg.lVal);
 			Dealy(20);
 			dm.LeftClick();
@@ -1479,7 +1480,7 @@ int CScript::Main_Attack()
 		}
 		Dealy(AttackNextDealy);
 	}
-	//WriteLog("ÊÍ·ÅÊ£Óà±øÖÖ");
+	//WriteLog("é‡Šæ”¾å‰©ä½™å…µç§");
 	for (int j = 0; j <= 3; j++)
 	{
 		if (scriptStateCode<=0)
@@ -1574,21 +1575,21 @@ int CScript::Main_Attack()
 		{
 			return 0;
 		}
-		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//ÊÍ·Å Ô®¾ü
+		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//é‡Šæ”¾ æ´å†›
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÔ®¾ü"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			//WriteLog("é‡Šæ”¾æ´å†›"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 		dm.FindMultiColor(18, 568, 834, 617, "e7b463-0f0f0f", "21|13|e8a540-0f0f0f,-7|13|e0bf76-0f0f0f,4|9|e89268-0f0f0f,8|10|ea946e-0f0f0f", 0.9, 1, &xg, &yg);//bar barin king
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÂùÍõ"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			//WriteLog("é‡Šæ”¾è›®ç‹"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 
 		dm.FindMultiColor(18, 568, 834, 617, "6C4CB4-040404", "0|0|6C4CB4-040404,4|-1|7253BC-060704,-8|16|D59486-0B1012,7|15|E48A61-040202,8|12|F39A6E-030503,11|12|F4A074-040404,23|13|6C44B6-040202,26|21|6840B0,31|21|6C48BB-040303", 0.9, 1, &xg, &yg);//archer king
 		if (xg.lVal > 0)
 		{
-			//WriteLog("ÊÍ·ÅÅ®Íõ");
+			//WriteLog("é‡Šæ”¾å¥³ç‹");
 			dm.MoveTo(xg.lVal, yg.lVal);
 			Dealy(20);
 			dm.LeftClick();
@@ -1623,7 +1624,7 @@ int CScript::EqualAttack()
 	AttackChangeDealy = 500;
 	AttackNextDealy = 1000;
 	dm.SetPath(_T("\Pic\\attack"));
-	WriteLog(_T("¶¨Î»ÏÂ±øÎ»ÖÃ"));
+	WriteLog(_T("å®šä½ä¸‹å…µä½ç½®"));
 	VARIANT x1, y1;
 	long now_x = 0, now_y = 0;
 	int solider_num = 0; //
@@ -1670,7 +1671,7 @@ int CScript::EqualAttack()
 			return 0;
 		}
 	}
-	WriteLog(_T("¶¨Î»Íê³É"));
+	WriteLog(_T("å®šä½å®Œæˆ"));
 	Dealy(200);
 	VARIANT xg, yg;
 	for (int j = 0; j <= 3; j++)
@@ -1798,21 +1799,21 @@ int CScript::EqualAttack()
 			dm = NULL;
 			return 0;
 		}
-		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//ÊÍ·Å Ô®¾ü
+		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//é‡Šæ”¾ æ´å†›
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÔ®¾ü"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			WriteLog("é‡Šæ”¾æ´å†›"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 		dm.FindMultiColor(18, 568, 834, 617, "e7b463-0f0f0f", "21|13|e8a540-0f0f0f,-7|13|e0bf76-0f0f0f,4|9|e89268-0f0f0f,8|10|ea946e-0f0f0f", 0.9, 1, &xg, &yg);//bar barin king
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÂùÍõ"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			WriteLog("é‡Šæ”¾è›®ç‹"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 
 		dm.FindMultiColor(18, 568, 834, 617, "6C4CB4-040404", "0|0|6C4CB4-040404,4|-1|7253BC-060704,-8|16|D59486-0B1012,7|15|E48A61-040202,8|12|F39A6E-030503,11|12|F4A074-040404,23|13|6C44B6-040202,26|21|6840B0,31|21|6C48BB-040303", 0.9, 1, &xg, &yg);//archer king
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÅ®Íõ");
+			WriteLog("é‡Šæ”¾å¥³ç‹");
 			dm.MoveTo(xg.lVal, yg.lVal);
 			Dealy(20);
 			dm.LeftClick();
@@ -1823,7 +1824,7 @@ int CScript::EqualAttack()
 		}
 		Dealy(AttackNextDealy);
 	}
-	WriteLog("ÊÍ·ÅÊ£Óà±øÖÖ");
+	WriteLog("é‡Šæ”¾å‰©ä½™å…µç§");
 	for (int j = 0; j <= 3; j++)
 	{
 		if (scriptStateCode <= 0)
@@ -1920,21 +1921,21 @@ int CScript::EqualAttack()
 			dm = NULL;
 			return 0;
 		}
-		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//ÊÍ·Å Ô®¾ü
+		dm.FindMultiColor(25, 570, 827, 652, "84bce0-0f0f0f", "-26|22|5f97ce-0f0f0f,27|24|6297cc-0f0f0f,-11|45|4b6e8f-0f0f0f,17|42|4a6f95-0f0f0f", 0.9, 1, &xg, &yg);//é‡Šæ”¾ æ´å†›
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÔ®¾ü"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			WriteLog("é‡Šæ”¾æ´å†›"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 		dm.FindMultiColor(18, 568, 834, 617, "e7b463-0f0f0f", "21|13|e8a540-0f0f0f,-7|13|e0bf76-0f0f0f,4|9|e89268-0f0f0f,8|10|ea946e-0f0f0f", 0.9, 1, &xg, &yg);//bar barin king
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÂùÍõ"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
+			WriteLog("é‡Šæ”¾è›®ç‹"); dm.MoveTo(xg.lVal, yg.lVal); Dealy(20); dm.LeftClick(); Dealy(200); dm.MoveTo(x[0][1], y[0][1]); Dealy(20); dm.LeftClick();
 		}
 
 		dm.FindMultiColor(18, 568, 834, 617, "6C4CB4-040404", "0|0|6C4CB4-040404,4|-1|7253BC-060704,-8|16|D59486-0B1012,7|15|E48A61-040202,8|12|F39A6E-030503,11|12|F4A074-040404,23|13|6C44B6-040202,26|21|6840B0,31|21|6C48BB-040303", 0.9, 1, &xg, &yg);//archer king
 		if (xg.lVal > 0)
 		{
-			WriteLog("ÊÍ·ÅÅ®Íõ");
+			WriteLog("é‡Šæ”¾å¥³ç‹");
 			dm.MoveTo(xg.lVal, yg.lVal);
 			Dealy(20);
 			dm.LeftClick();
@@ -1981,7 +1982,7 @@ int CScript::User_Attack()
 	AttackChangeDealy = 500;
 	AttackNextDealy = 1000;
 	dm.SetPath(_T("\Pic\\attack"));
-	WriteLog(_T("¶¨Î»ÏÂ±øÎ»ÖÃ"));
+	WriteLog(_T("å®šä½ä¸‹å…µä½ç½®"));
 	long ResourceX[4] = { 0 }, ResourceY[4] = { 0 };
 	VARIANT x1, y1;
 	long now_x = 0, now_y = 0;
@@ -1993,7 +1994,7 @@ int CScript::User_Attack()
 	attack_xy[2] = dm.FindColorBlockEx(426, 305, 768, 506, "a7b052-050f0f|9cb24a-0f0f0f|bad058-050f0f", 1, 88, 10, 10);
 	attack_xy[3] = dm.FindColorBlockEx(428, 113, 707, 298, "a7b052-050f0f|9cb24a-0f0f0f|bad058-050f0f", 1, 88, 10, 10);
 	int ArmySort[18] = { 3,1,5,4,2,16,7,6,15,10,11,12,13,14,15,16,17,18 };
-	WriteLog(_T("¶¨Î»Íê³É"));
+	WriteLog(_T("å®šä½å®Œæˆ"));
 	// *********************** End ***********************//
 	for (int Rattack = 0; Rattack <= 1; Rattack++)
 	{
@@ -2218,7 +2219,7 @@ int CScript::SearchResult(long InputGold, long IputElixir, long gold, long Elixi
 
 int CScript::SearchFish()
 {
-	WriteLog(_T("ËÑÓã"));
+	WriteLog(_T("æœé±¼"));
 	dm.MoveTo(59, 601);
 	Dealy(200);
 	dm.LeftClick();
@@ -2259,7 +2260,7 @@ int CScript::SearchFish()
 			dm.FindMultiColor(702, 481, 840, 544, "f0b028-0f0f0f", "71|-4|f0b028-0f0f0f,3|31|d84d00-0f0f0f,87|34|d84800-0f0f0f", 0.9, 0, &x, &y);
 			if (search_i >= SearchWait)
 			{
-				WriteLog(_T("¿¨°×ÔÆÊ±¼ä¹ı³¤£¡³¢ÊÔÖØĞÂÆô¶¯")); 
+				WriteLog(_T("å¡ç™½äº‘æ—¶é—´è¿‡é•¿ï¼å°è¯•é‡æ–°å¯åŠ¨")); 
 				scriptStateCode = -2;
 				IsThreadRun=false; 
 				return 0;
@@ -2274,7 +2275,7 @@ int CScript::SearchFish()
 		G_gold = dm.Ocr(46, 65, 121, 84, "fffbcc-030303|ffe8fd-030303|f3f3f3-030303", 0.8);
 		G_water = dm.Ocr(44, 96, 121, 114, "fffbcc-030303|ffe8fd-030303|f3f3f3-030303", 0.8);
 		G_oil = dm.Ocr(44, 117, 113, 145, "fffbcc-030303|ffe8fd-030303|f3f3f3-030303", 0.8);
-		WriteLog(SearchCount_str + " [½ğ] " + G_gold + " [Ë®] " + G_water + " [ÓÍ] " + G_oil);
+		WriteLog(SearchCount_str + " [é‡‘] " + G_gold + " [æ°´] " + G_water + " [æ²¹] " + G_oil);
 		if (SearchResult(T_gold, T_water, _ttoi(G_gold), _ttoi(G_water), type) > 0 && _ttoi(G_oil) >= T_oil)
 		{
 			if (check_deadbase() >= 1)
@@ -2286,7 +2287,7 @@ int CScript::SearchFish()
 					dm.MoveTo(767, 517);
 					Dealy(200);
 					dm.LeftClick();
-					WriteLog(_T("·ÀÓù¹ı¸ß"));
+					WriteLog(_T("é˜²å¾¡è¿‡é«˜"));
 					Dealy(1000);
 				}
 			}
@@ -2302,7 +2303,7 @@ int CScript::SearchFish()
 				dm.MoveTo(767, 517);
 				Dealy(200);
 				dm.LeftClick();
-				WriteLog(_T("²»ÊÇËÀÓã"));
+				WriteLog(_T("ä¸æ˜¯æ­»é±¼"));
 				Dealy(1000);
 			}
 		}
@@ -2330,7 +2331,7 @@ int CScript::SearchFish()
 
 void CScript::CollectResource()
 {
-	WriteLog("ÊÕ¼¯×ÊÔ´");
+	WriteLog("æ”¶é›†èµ„æº");
 	VARIANT x, y;
 	for (int s = 1; s <= 10; s++)
 	{
@@ -2374,7 +2375,7 @@ void CScript::CollectResource()
 
 int CScript::Donate()
 {
-	WriteLog("¾è±ø");
+	WriteLog("æå…µ");
 	Dealy(3000);
 	int DonateN = 5, DonateType = 0;
 	CString colorStr, result, first, next, path;;
@@ -2418,8 +2419,8 @@ int CScript::Donate()
 	IsArmy[18] = _ttoi(coc.GetSingleSetting("IsBower"));
 	CString s;
 	CString army[21] = {};
-	army[1] = "ËæÒâ", army[2] = "¹­|Ëæ|Òâ|", army[3] = "¾ŞÈË|ºÚÅÖ|ÅÖ×Ó", army[4] = "¸ç|Ğ¡Íµ", army[5] = "Õ¨", army[6] = "ºÚÇò", army[7] = "·¨", army[8] = "ÌìÊ¹", army[9] = "Áú", army[10] = "Æ¤¿¨";
-	army[11] = "Áú±¦±¦", army[12] = "¿ó¹¤", army[13] = "ÍöÁé", army[14] = "Ò°Öí|Öí", army[15] = "ÎäÉñ", army[16] = "Ê¯Í·", army[17] = "Å®Î×", army[18] = "Ìì¹·", army[19] = "À¶ÅÖ|Í¶ÊÖ", army[20] = "";
+	army[1] = "éšæ„", army[2] = "å¼“|éš|æ„|", army[3] = "å·¨äºº|é»‘èƒ–|èƒ–å­", army[4] = "å“¥|å°å·", army[5] = "ç‚¸", army[6] = "é»‘çƒ", army[7] = "æ³•", army[8] = "å¤©ä½¿", army[9] = "é¾™", army[10] = "çš®å¡";
+	army[11] = "é¾™å®å®", army[12] = "çŸ¿å·¥", army[13] = "äº¡çµ", army[14] = "é‡çŒª|çŒª", army[15] = "æ­¦ç¥", army[16] = "çŸ³å¤´", army[17] = "å¥³å·«", army[18] = "å¤©ç‹—", army[19] = "è“èƒ–|æŠ•æ‰‹", army[20] = "";
 	int ExtraClick = 0;
 	for (long donate_y = 89; donate_y < 666; donate_y += 50)
 	{
@@ -2656,13 +2657,13 @@ int CScript::ConnectBsOrOthers()
 	case 1:
 		if (winText.GetLength() < 1)
 		{
-			AfxMessageBox("ÇëÊäÈëÄ£ÄâÆ÷±êÌâ£¡", MB_OK);
+			AfxMessageBox("è¯·è¾“å…¥æ¨¡æ‹Ÿå™¨æ ‡é¢˜ï¼", MB_OK);
 		}
 		window_hwnd = dm.FindWindowA("Qt5QWindowIcon", winText);
 		coc.parenthwnd = window_hwnd;
 		str.Format("window_hwnd=%ld", window_hwnd);
 		//WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-		str = dm.EnumWindow(window_hwnd, "", "Qt5QWindowIcon", 1);//²éÕÒ×Ó´°¿Ú
+		str = dm.EnumWindow(window_hwnd, "", "Qt5QWindowIcon", 1);//æŸ¥æ‰¾å­çª—å£
 		//WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
 		str = str.Right(str.GetLength() - str.Find(",") - 1);
 		//WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
@@ -2684,12 +2685,12 @@ int CScript::ConnectBsOrOthers()
 	case 2:
 		if (winText.GetLength() < 1)
 		{
-			AfxMessageBox("ÇëÊäÈëÄ£ÄâÆ÷±êÌâ£¡", MB_OK);
+			AfxMessageBox("è¯·è¾“å…¥æ¨¡æ‹Ÿå™¨æ ‡é¢˜ï¼", MB_OK);
 		}
 		window_hwnd = dm.FindWindowA("Qt5QWindowIcon", winText);
 		str.Format("window_hwnd=%ld", window_hwnd);
 		//WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-		str = dm.EnumWindow(window_hwnd, "QWidgetClassWindow", "Qt5QWindowIcon", 1 + 2);//²éÕÒ×Ó´°¿Ú
+		str = dm.EnumWindow(window_hwnd, "QWidgetClassWindow", "Qt5QWindowIcon", 1 + 2);//æŸ¥æ‰¾å­çª—å£
 
 		if (str.Find(",") > 0)
 		{
@@ -2778,7 +2779,7 @@ int CScript::CloseBS()
 		}
 
 	}
-	//WriteLog("¹Ø±ÕÄ£ÄâÆ÷", true, RGB(0xff, 0x00, 0x00), false);
+	//WriteLog("å…³é—­æ¨¡æ‹Ÿå™¨", true, RGB(0xff, 0x00, 0x00), false);
 	return ret;
 }
 
@@ -2792,11 +2793,11 @@ int CScript::SetClientWindowSize()
 	{
 		CString xwindow, ywindow;
 		xwindow.Format("%ld", xw.lVal); ywindow.Format("%ld", yw.lVal);
-		//WriteLog("´íÎóµÄ·Ö±æÂÊ£º" + xwindow + "X" + ywindow, true, RGB(0xff, 0x00, 0x00), false);
-		//WriteLog(_T("ÉèÖÃ·Ö±æÂÊ"), true, RGB(0xff, 0x00, 0x00), false);
+		//WriteLog("é”™è¯¯çš„åˆ†è¾¨ç‡ï¼š" + xwindow + "X" + ywindow, true, RGB(0xff, 0x00, 0x00), false);
+		//WriteLog(_T("è®¾ç½®åˆ†è¾¨ç‡"), true, RGB(0xff, 0x00, 0x00), false);
 		CRegKey key;
 		key.Create(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0"));
-		CString strUser = "SOFTWARE\BlueStacks\\Guests\Android\\FrameBuffer";//ÒªĞ´ÈëµÄ¼üÃû³Æ
+		CString strUser = "SOFTWARE\BlueStacks\\Guests\Android\\FrameBuffer";//è¦å†™å…¥çš„é”®åç§°
 		DWORD strUserValuew = 850;
 		DWORD strUserValueh = 667;
 		key.SetDWORDValue(_T("Width"), strUserValuew);
@@ -2819,7 +2820,7 @@ int CScript::SetClientWindowSize()
 int CScript::StartCoc(CString _in_coc_ver)
 {
 	func_adb("am start -n " + _in_coc_ver);
-	WriteLog("Æô¶¯²¿Âä³åÍ»");
+	WriteLog("å¯åŠ¨éƒ¨è½å†²çª");
 	return 0;
 }
 
@@ -2829,14 +2830,14 @@ int CScript::StopCoc(CString _in_coc_ver)
 	CString close_ver = "";
 	close_ver = _in_coc_ver.Left(_in_coc_ver.Find(_T("/")));
 	func_adb(_T("am force-stop " + close_ver));
-	WriteLog("Í£Ö¹²¿Âä³åÍ»");
+	WriteLog("åœæ­¢éƒ¨è½å†²çª");
 	return 0;
 }
 
 
 int CScript::DownTroophs()
 {
-	WriteLog(_T("½µ±­"));
+	WriteLog(_T("é™æ¯"));
 	dm.MoveTo(59, 601);
 	Dealy(200);
 	dm.LeftClick();
@@ -2864,7 +2865,7 @@ int CScript::DownTroophs()
 		dm.FindMultiColor(702, 481, 840, 544, "f0b028-0f0f0f", "71|-4|f0b028-0f0f0f,3|31|d84d00-0f0f0f,87|34|d84800-0f0f0f", 0.9, 0, &x, &y);
 		if (search_i >= SearchWait)
 		{
-			WriteLog(_T("¿¨°×ÔÆÊ±¼ä¹ı³¤£¡³¢ÊÔÖØĞÂÆô¶¯"));
+			WriteLog(_T("å¡ç™½äº‘æ—¶é—´è¿‡é•¿ï¼å°è¯•é‡æ–°å¯åŠ¨"));
 			scriptStateCode = -3;
 			IsThreadRun = false;
 			return 0;
@@ -2980,13 +2981,13 @@ int CScript::Statistics()
 	}
 	CString tstr;
 	tstr = "";
-	tstr.Format("ÔËĞĞÊ±¼ä£º%ld day %ld h %ld minutes.", RunTime / 1440, (RunTime % 1440) / 60, RunTime % 60);
+	tstr.Format("è¿è¡Œæ—¶é—´ï¼š%ld day %ld h %ld minutes.", RunTime / 1440, (RunTime % 1440) / 60, RunTime % 60);
 	//pag8.RunTime.SetWindowTextA(tstr);
-	tstr.Format("¹¥»÷´ÎÊı£º%ld", coc.GetSomeCount(1));
+	tstr.Format("æ”»å‡»æ¬¡æ•°ï¼š%ld", coc.GetSomeCount(1));
 	//pag8.AttackCount.SetWindowTextA(tstr);
-	tstr.Format("ËÑË÷´ÎÊı£º%ld", coc.GetSomeCount(0));
+	tstr.Format("æœç´¢æ¬¡æ•°ï¼š%ld", coc.GetSomeCount(0));
 	//pag8.SearchCount.SetWindowTextA(tstr);
-	tstr.Format("µ±Ç°ÕËºÅ£º%d", SwitchNo);
+	tstr.Format("å½“å‰è´¦å·ï¼š%d", SwitchNo);
 	//pag8.NowLog.SetWindowText(tstr);
 	return 0;
 }
@@ -3002,12 +3003,12 @@ int CScript::AddDict()
 {
 	long ret = 0;
 	dm.SetPath("\Dict");
-	ret += dm.SetDict(0, "coc_army.bak"); //ÉèÖÃ×Ö¿â 0
-	ret += dm.SetDict(1, "cocfish.txt");      //ÉèÖÃ×Ö¿â 1
-	ret += dm.SetDict(2, "cocresource.bak");  //ÉèÖÃ×Ö¿â 2
-	ret += dm.SetDict(3, "cocbein.bak");      //ÉèÖÃ×Ö¿â 3
-									   //dm.SetDict(4, "OnlineTime.txt");   //ÉèÖÃ×Ö¿â 4
-	ret += dm.SetDict(5, "coc_donate.txt");   //ÉèÖÃ×Ö¿â 5
+	ret += dm.SetDict(0, "coc_army.bak"); //è®¾ç½®å­—åº“ 0
+	ret += dm.SetDict(1, "cocfish.txt");      //è®¾ç½®å­—åº“ 1
+	ret += dm.SetDict(2, "cocresource.bak");  //è®¾ç½®å­—åº“ 2
+	ret += dm.SetDict(3, "cocbein.bak");      //è®¾ç½®å­—åº“ 3
+									   //dm.SetDict(4, "OnlineTime.txt");   //è®¾ç½®å­—åº“ 4
+	ret += dm.SetDict(5, "coc_donate.txt");   //è®¾ç½®å­—åº“ 5
 	ret += dm.SetDict(6, "AttackArmy.txt");
 	return ret;
 }
