@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="HTML 帮助文件">
+      <UniqueIdentifier>{25201469-cd07-4526-9b55-aa4a06b726b9}</UniqueIdentifier>
+      <Extensions>hhp;hhc;hhk;gif;jpg</Extensions>
+    </Filter>
+    <Filter Include="HTML 帮助主题">
+      <UniqueIdentifier>{03f0baf2-27ad-4dd6-98ea-1e657bc36dde}</UniqueIdentifier>
+      <Extensions>htm;html</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="res\newcocbot.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\newcocbot.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="hlp\newcocbot.hhk">
+      <Filter>HTML 帮助文件</Filter>
+    </None>
+    <None Include="hlp\HIDD_ROOT_DIALOG.htm">
+      <Filter>HTML 帮助主题</Filter>
+    </None>
+    <None Include="hlp\newcocbot.hhc">
+      <Filter>HTML 帮助文件</Filter>
+    </None>
+    <None Include="res\icon1.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\coc_bot.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\icon3.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Start.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Stop.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bin241.bin">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page6.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page7.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page8.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page9.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Adbshell.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="page10.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BindSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Const.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cdmsoft.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cocBotDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cocBot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="botFunction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page7.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page8.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page9.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Adbshell.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="page10.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BindSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cocBot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cocBotDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="botFunction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="newcocbot.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="hlp\newcocbot.hhp">
+      <Filter>HTML 帮助文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resource.h">
+      <Filter>头文件</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\test.manifest" />
+  </ItemGroup>
+</Project>
