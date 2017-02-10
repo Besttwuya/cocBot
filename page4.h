@@ -3,21 +3,21 @@
 #include "afxcmn.h"
 
 
-// page4 ¶Ô»°¿ò
+// page4 å¯¹è¯æ¡†
 
 class page4 : public CDialogEx
 {
 	DECLARE_DYNAMIC(page4)
 
 public:
-	page4(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	page4(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~page4();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_DIALOG4 };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -34,6 +34,6 @@ public:
 	
 	// attack dark elixir
 	CComboBox UseLightingCount;
-	//**************** list ********************//
 	CComboBox AttackSpeed;
+	CComboBox attackCount;
 };
