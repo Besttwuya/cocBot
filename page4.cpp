@@ -1,4 +1,4 @@
-// page4.cpp : ÊµÏÖÎÄ¼ş
+// page4.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// page4 ¶Ô»°¿ò
+// page4 å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(page4, CDialogEx)
 
@@ -36,6 +36,7 @@ void page4::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT4, AttackExitDarkElixir);
 	DDX_Control(pDX, IDC_COMBO4, UseLightingCount);
 	DDX_Control(pDX, IDC_COMBO5, AttackSpeed);
+	DDX_Control(pDX, IDC_COMBO6, attackCount);
 }
 
 
@@ -43,7 +44,7 @@ BEGIN_MESSAGE_MAP(page4, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// page4 ÏûÏ¢´¦Àí³ÌĞò
+// page4 æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 
