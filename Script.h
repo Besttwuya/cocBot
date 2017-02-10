@@ -2,6 +2,7 @@
 
 
 //Ω≈±æ“˝«Ê¿‡
+
 class CScript
 {
 public:
@@ -80,5 +81,7 @@ public:
 	bool HideKey();
 	int AddDict();
 	int RepairAttackArmy(int oldArmyCount, int type,int &distance);
+	int GetArmyMsg();
+	int MakeRect(long srcX,long* x1,long* x2);
 };
 //******************* thread proc ***************//
