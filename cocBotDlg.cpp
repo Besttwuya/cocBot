@@ -8,12 +8,6 @@
 #include "afxdialogex.h"
 
 #include "ConnectServer.h"
-
-class ConnectServer;
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-//*************** Global Ver ***************//
 page1 pag1;//page class
 page2 pag2;
 page3 pag3;
@@ -25,6 +19,13 @@ page8 pag8;
 page9 pag9;
 page10 pag10;
 BindSet bindset;
+
+class ConnectServer;
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+//*************** Global Ver ***************//
+
 ConnectServer* BotServer;//Bot Server
 CAdbshell adb; // Adb;
 long exit_all = 1;//exit code
@@ -40,7 +41,6 @@ bool IsFisrstRecord = true;
 int Exit_State = 0;
 CScript* script = new CScript;
 //*********** Struct ****************//
-ArmyMsg attackArmy = { 0,0,0,0,0,0 };
 //***** Global Functoin ***********//
 CString GetExePath()
 {
@@ -114,7 +114,7 @@ void  WriteLog(CString logStr)
 			cf.yHeight = 13 * 13;
 			cf.crTextColor = RGB(0X00, 0X00, 0X00);
 		}
-		strcpy(cf.szFaceName, _T("宋体"));
+		strcpy_s(cf.szFaceName,32, _T("宋体"));
 		//cf.szFaceName=_T("隶书");
 		WriteStr = _T("[") + keytime + _T("]") + logStr + _T("\r\n");
 		if (WriteStr.GetLength() > 100)
@@ -410,9 +410,13 @@ CString GetAllSetting()
 	winText.Format("[InfernoLevel=%d]", pag3.InfernoLevel.GetCurSel());
 	str_set += winText; winText = "";;
 	winText.Format("[EagleArtilleryLevel=%d]", pag3.EagleArtilleryLevel.GetCurSel());
-	str_set += winText; winText = "";;
+	str_set += winText;
 	winText.Format("[AttackSpeed=%d]", pag4.AttackSpeed.GetCurSel());
-	str_set += winText; winText = "";;
+	str_set += winText;
+	winText.Format("[AttackGird=%d]", pag4.AttackGird.GetCurSel());
+	str_set += winText;
+	winText.Format("[attackCount=%d]", pag4.attackCount.GetCurSel());
+	str_set += winText;
 	winText.Format("[AttackDeadbaseStyle=%d]", pag4.AttackDeadbaseStyle.GetCurSel());
 	str_set += winText; winText = "";;
 	winText.Format("[AttackActivebaseStyle=%d]", pag4.AttackActivebaseStyle.GetCurSel());
@@ -669,7 +673,9 @@ void UpdateWindowSet(CString result_str)
 	pag3.XBowLevel.SetCurSel(_ttoi(bot.GetSingleSetting("XBowLevel")));
 	pag3.InfernoLevel.SetCurSel(_ttoi(bot.GetSingleSetting("InfernoLevel")));
 	pag3.EagleArtilleryLevel.SetCurSel(_ttoi(bot.GetSingleSetting("EagleArtilleryLevel")));
-	pag4.AttackSpeed.SetCurSel(_ttoi(bot.GetSingleSetting("AttackSpeed")));
+	pag4.AttackSpeed.SetCurSel(_ttoi(bot.GetSingleSetting("AttackSpeed")));//attackCount
+	pag4.attackCount.SetCurSel(_ttoi(bot.GetSingleSetting("attackCount")));//AttackGird
+	pag4.AttackGird.SetCurSel(_ttoi(bot.GetSingleSetting("AttackGird")));
 	pag4.AttackDeadbaseStyle.SetCurSel(_ttoi(bot.GetSingleSetting("AttackDeadbaseStyle")));
 	pag4.AttackActivebaseStyle.SetCurSel(_ttoi(bot.GetSingleSetting("AttackActivebaseStyle")));
 	pag4.AttackMinDarkElixirLevel.SetCurSel(_ttoi(bot.GetSingleSetting("AttackMinDarkElixirLevel")));
@@ -836,33 +842,22 @@ int SendMsgToServer(CString str)
 	BotServer->Send(str, strlen(str), 0);
 	return 0;
 }
-BOOL IsFirstUsePrograme(CString ver)
+BOOL IsFirstUsePrograme()
 {
-	bool IsFirst = false;
+	BOOL IsFirst = FALSE;
 	CRegKey myKey;
 	CString pbuf;
-	DWORD Length;
-	Length = 255;
-	if (myKey.Open(HKEY_CURRENT_USER, "SOFTWARE\\CocBot\\Config\\0") != ERROR_SUCCESS)
+	const int maxLen = 255;
+	ULONG nchars = 0;
+	myKey.Create(HKEY_CURRENT_USER, "SOFTWARE\\CocBot\\Config\\0");
+	myKey.QueryMultiStringValue("version", pbuf.GetBuffer(maxLen), &nchars);
+	pbuf.ReleaseBuffer();
+	CString str = cocBotVer;
+	if (pbuf != str)
 	{
-
-		myKey.Create(HKEY_CURRENT_USER, "SOFTWARE\\CocBot\\Config\\0");
-		myKey.SetValue(ver, "version");
-		myKey.SetValue(123, "name");
-		IsFirst = true;
-
-	}
-	else
-	{
-		myKey.QueryValue(pbuf.GetBuffer(255), "version", &Length);
-		pbuf.ReleaseBuffer();
-		if (pbuf != ver)
-		{
-			IsFirst = true;
-			myKey.SetValue(ver, "version");
-			myKey.SetValue(20170102, "name");
-		}
-
+		IsFirst = TRUE;
+		myKey.SetMultiStringValue("version", cocBotVer);
+		myKey.SetMultiStringValue("Talking", QQGROUPNAME);
 	}
 
 	myKey.Close();
@@ -964,7 +959,7 @@ BOOL HideKey()
 //************* Important Thread Function **************//
 UINT  Main_Game(LPVOID lpParamter)
 {
-	if (script->IsThreadRun ==false)
+	if (script->IsThreadRun == false)
 	{
 		script->dm = NULL;
 		return 0;
@@ -1021,7 +1016,7 @@ UINT  Main_Game(LPVOID lpParamter)
 	Dealy(200);
 
 	//hThread_ID2 = AfxBeginThread(Identify_OffLine,NULL,THREAD_PRIORITY_NORMAL,0,0,NULL);
-	if (script->IsThreadRun ==false)
+	if (script->IsThreadRun == false)
 	{
 		script->dm = NULL;
 		return 0;
@@ -1029,28 +1024,27 @@ UINT  Main_Game(LPVOID lpParamter)
 	script->AddDict();
 	script->StartCoc(script->coc.GetCocVer());
 	script->Dealy(2000);
-	script->TownJudge();
+	script->checkMainScreen();
 	if (script->IsThreadRun == false)
 	{
 		script->dm = NULL;
 		return 0;
 	}
-	script->SmallScreen();
+	script->ZoomOut();
 
 	script->Dealy(1000);
-	if (script->IsThreadRun ==false)
+	if (script->IsThreadRun == false)
 	{
 		script->dm = NULL;
 		return 0;
 	}
 	do
 	{
-		script->SmallScreen();
+		script->ZoomOut();
 		script->Dealy(1000);
-		//*******统计资源**********//
 		for (int r = 0; r <= 10; r++)
 		{
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
@@ -1060,11 +1054,11 @@ UINT  Main_Game(LPVOID lpParamter)
 			{
 
 				script->DownTroophs();
-				if (script->IsThreadRun ==false)
+				if (script->IsThreadRun == false)
 				{
 					return 0;
 				}
-				script->TownJudge();
+				script->checkMainScreen();
 			}
 			else
 			{
@@ -1072,14 +1066,14 @@ UINT  Main_Game(LPVOID lpParamter)
 			}
 
 		}
-		if (script->IsThreadRun ==false || script->scriptStateCode<=0)
+		if (script->IsThreadRun == false || script->scriptStateCode <= 0)
 		{
 			script->dm = NULL;
 			return 0;
 		}
 		if (script->CheckArmyNum(&script->train_time) && _ttoi(script->coc.GetSingleSetting("Attack")) == 1)
 		{
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
@@ -1089,13 +1083,13 @@ UINT  Main_Game(LPVOID lpParamter)
 			{
 				script->MakeArmy();
 				Dealy(2000);
-				if (script->IsThreadRun ==false)
+				if (script->IsThreadRun == false)
 				{
 					script->dm = NULL;
 					return 0;
 				}
 				Ret = script->SearchFish();
-				if (Ret==1)
+				if (Ret == 1)
 				{
 					int AttackType = _ttoi(script->coc.GetSingleSetting("AttackDeadbaseStyle"));
 					switch (AttackType)
@@ -1122,14 +1116,14 @@ UINT  Main_Game(LPVOID lpParamter)
 				WriteLog("not allowed attack", true, RGB(0xff, 0x00, 0x00), true);
 			}
 
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
 			}
-			script->TownJudge();
+			script->checkMainScreen();
 
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
@@ -1138,7 +1132,7 @@ UINT  Main_Game(LPVOID lpParamter)
 		else
 		{
 
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
@@ -1146,10 +1140,9 @@ UINT  Main_Game(LPVOID lpParamter)
 			if (script->train_time == 0 && script->LootRecord[script->SwitchNo].ArmyRet <= 95)
 			{
 				WriteLog("add / train necessary army");
-				WriteLog("bot do this when army in training is not enough");
 				script->MakeArmy();
 			}
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
@@ -1170,14 +1163,14 @@ UINT  Main_Game(LPVOID lpParamter)
 				script->scriptStateCode = ShouldSwitch;
 				return 0;
 			}
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
 			}
-			if (script->scriptStateCode>0)
+			if (script->scriptStateCode > 0)
 			{
-				script->DealyRandTime(5, 60);
+				script->DealyRandTime(15, 60);
 			}
 
 			script->Dealy(300);
@@ -1185,23 +1178,23 @@ UINT  Main_Game(LPVOID lpParamter)
 			{
 				script->Donate();
 			}
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
 			}
-			script->TownJudge();
+			script->checkMainScreen();
 			Statistics();
 			//UpDate_Wall();
 
-			if (script->IsThreadRun ==false)
+			if (script->IsThreadRun == false)
 			{
 				script->dm = NULL;
 				return 0;
 			}
 
 		}
-	} while (script->IsThreadRun ==true||script->scriptStateCode>0);
+	} while (script->IsThreadRun == true || script->scriptStateCode > 0);
 	return 0;
 }
 UINT  Main_Thread(LPVOID lpParamter)
@@ -1222,7 +1215,7 @@ UINT  Main_Thread(LPVOID lpParamter)
 	while (exit_all != 1)
 	{
 		//************掉线检测，是则重启**********//
-		if (script->GetScriptState()==ShouldRestart)
+		if (script->GetScriptState() == ShouldRestart)
 		{
 			script->IsThreadRun = false;
 			Dealy(3000);
@@ -1236,7 +1229,7 @@ UINT  Main_Thread(LPVOID lpParamter)
 
 		}
 		//*************** Check Should OffLine ***********//
-		if (script->scriptStateCode==ShouldWaitForArmy)
+		if (script->scriptStateCode == ShouldWaitForArmy)
 		{
 
 			script->StopCoc(script->coc.GetCocVer());
@@ -1368,7 +1361,7 @@ UINT SwitchMode_Thread(LPVOID lpParamter)
 	while (exit_all != 1)
 	{
 		//************掉线检测，是则重启**********//
-		if (script->scriptStateCode==ShouldRestart)
+		if (script->scriptStateCode == ShouldRestart)
 		{
 			script->IsThreadRun = false;
 			script->StopCoc(script->coc.GetCocVer());
@@ -1377,13 +1370,12 @@ UINT SwitchMode_Thread(LPVOID lpParamter)
 			Dealy(5000);
 			script->CreateDm();
 			script->IsThreadRun = true;
-			//IsOffLine = 0;
 			script->scriptStateCode = SwitchRun;
 			hThread_ID2 = AfxBeginThread(Main_Game, NULL, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
 
 		}
 		//**************** SwitchMode *****************//
-		if (script->scriptStateCode==ShouldSwitch)
+		if (script->scriptStateCode == ShouldSwitch)
 		{
 			script->IsThreadRun = false;
 			script->StopCoc(script->coc.GetCocVer());
@@ -1461,7 +1453,7 @@ UINT SwitchMode_Thread(LPVOID lpParamter)
 			script->scriptStateCode = NormalNoRun;
 			script->IsThreadRun = false;
 			StopThread();
-			return 0;
+			return 0x4;
 		}
 		Dealy(200);
 
@@ -1515,14 +1507,21 @@ CcocBotDlg::CcocBotDlg(CWnd* pParent /*=NULL*/)
 	, m_OldState(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON2);
-	bot_version = "5.0131";
+	bot_version = cocBotVer;
 	// 将数组m_nzValues的元素都初始化为0   
 	memset(m_nzValues, 0, sizeof(int) * POINT_COUNT);
+	//初始化richedit
+	BotServer = NULL;
+	script->pRichEditCtrl = &(pag9.m_RichEdit1);
 
 
 }
 CcocBotDlg::~CcocBotDlg()
 {
+	if (BotServer != NULL)
+	{
+		delete BotServer;
+	}
 	delete script;
 }
 void CcocBotDlg::DoDataExchange(CDataExchange* pDX)
@@ -1532,6 +1531,7 @@ void CcocBotDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_State, State);
 	DDX_Control(pDX, IDC_BUTTON1, m_Start);
 	DDX_Control(pDX, IDC_BUTTON2, m_Stop);
+	DDX_Control(pDX, IDC_SHOW, m_Show);
 }
 
 BEGIN_MESSAGE_MAP(CcocBotDlg, CDialogEx)
@@ -1582,12 +1582,11 @@ BOOL CcocBotDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	bot_version = _T("4.17.new year");
 	CString title;
 	GetWindowText(title);
-	title += "  当前版本号<";
-	title += *script->scriptVer;
-	title += ">";
+	title += "  当前版本号<<";
+	title += cocBotVer;
+	title += ">>";
 	title += " qq群：584618461";
 	SetWindowText(title);
 	main_tab.InsertItem(0, TEXT("快速设置"));
@@ -1672,7 +1671,11 @@ BOOL CcocBotDlg::OnInitDialog()
 	m_Start.SetIcon(m_Button1);
 	m_Stop.SetIcon(m_Button2);
 	// 启动定时器，ID为1，定时时间为200ms   
+	if (IsFirstUsePrograme()==TRUE)
+	{
+		WriteLog("欢迎首次使用cocBot,使用前务必阅读相关说明文档！", true, REDCOLOR, false);
 
+	}
 	if (!RegDm())
 	{
 		WriteLog("插件功能异常!", 1, RGB(0xff, 0x00, 0x00), false);
@@ -1754,13 +1757,14 @@ void CcocBotDlg::OnPaint()
 	}
 	else
 	{
-		/*
+		
 		CRect rect;
-		CPaintDC dc(this);
-		GetClientRect(rect);
-		dc.FillSolidRect(rect,RGB(0Xc0,0Xc0,0Xc0));
-		dc.FillPath();
-		*/
+		CDC* pdc=m_Show.GetDC();
+		m_Show.GetClientRect(&rect);
+		pdc->FillSolidRect(rect,RGB(0X00,0X00,0XFF));
+		pdc->FillPath();
+		pdc->TextOutA(rect.Width() / 2, rect.Height() / 2, "测试中...");
+		
 		CDialogEx::OnPaint();
 
 	}
@@ -1982,7 +1986,7 @@ void CcocBotDlg::OnStart()
 	InitlizeVariables();
 	if (pag7.IsSwitchMode.GetCheck() != 1)
 	{
-		
+
 		hThread_ID1 = AfxBeginThread(Main_Thread, 0, 0, NULL);
 	}
 	else
@@ -2070,64 +2074,7 @@ void CcocBotDlg::OnShowWindow()
 
 	}
 
-	/*CString winText;
-	pag1.BsOrOtherWindowText.GetWindowTextA(midStr);
-	window_hwnd = dmx.FindWindowA("", winText);
-	str.Format("window_hwnd=%ld", window_hwnd);
-	WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-	str = dmx.EnumWindow(window_hwnd, "QWidgetClassWindow", "Qt5QWindowIcon", 1 + 2);//查找子窗口
-	WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-	if (str.Find(",") > 0)
-	{
-		str = str.Right(str.GetLength() - str.Find(",") - 1);
-	}
-
-	WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-	window_hwnd = _ttoi(str);
-	long ret = 0;
-	CString bindstr[5] = {};
-	bindset.display.GetWindowTextA(bindstr[0]);
-	bindset.mouse.GetWindowTextA(bindstr[1]);
-	bindset.keypad.GetWindowTextA(bindstr[2]);
-	bindset.public_.GetWindowTextA(bindstr[3]);
-	bindset.mode.GetWindowTextA(bindstr[4]);
-	bindstr[3] = "";
-	if (window_hwnd)
-	{
-		if (bindset.IsBindWindowEx.GetCheck())
-		{
-			ret = dmx.BindWindowEx(window_hwnd, bindstr[0], bindstr[1], bindstr[2], bindstr[3], _ttoi(bindstr[4]));
-			Sleep(300);
-			str.Format("BindWindowEx=%ld", ret);
-		}
-		else
-		{
-			ret = dmx.BindWindow(window_hwnd, bindstr[0], bindstr[1], bindstr[2], _ttoi(bindstr[4]));
-			Sleep(300);
-			str.Format("BindWindow=%ld", ret);
-		}
-		WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-	}
-
-	if (!ret)
-	{
-		str.Format("GetLastError=%ld", dmx.GetLastError());
-		WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);
-	}
-	else
-	{
-		dmx.SetPath("");
-		dmx.Capture(0, 0, 850, 667, "screen.bmp");
-		WinExec("mspaint.exe screen.bmp", SW_SHOW);
-
-	}
-	dmx.UnBindWindow();
-	for (int i = 0; i < 5; i++)
-	{
-		str += "|";
-		str += bindstr[i];
-	}
-	WriteLog(str, true, RGB(0xff, 0x00, 0xff), false);*/
+	gameShow();
 	dmx = NULL;
 
 }
@@ -2146,7 +2093,7 @@ void CcocBotDlg::OnClose()
 		script->dm = NULL;
 
 	}
-	
+
 	KillTimer(1);
 	KillTimer(2);
 	CDialogEx::OnClose();
@@ -2293,8 +2240,8 @@ void CcocBotDlg::OnTimer(UINT_PTR nIDEvent)
 	pag8.m_ThreadCount.SetWindowText(str);
 	str = "状态：";
 	str += script->coc.State_str;
-	
-	if (m_OldState!=script->coc.State_str)
+
+	if (m_OldState != script->coc.State_str)
 	{
 		State.SetWindowText(str);
 		m_OldState = script->coc.State_str;
@@ -2319,7 +2266,9 @@ void CcocBotDlg::OnTimer(UINT_PTR nIDEvent)
 			str.Format("运行时间：%d 天 %d 小时 %d 分 %d 秒 ", bigTime / 86400, (bigTime % 86400) / 3600, (bigTime % 3600) / 60, bigTime % 60);
 			pag8.RunTime.SetWindowTextA(str);
 			pag8.NowLog.GetWindowText(str);
-			WinText = "CocBot 当前版本:<<" + bot_version + ">>";
+			WinText = "CocBot 当前版本:<<";
+			WinText += cocBotVer;
+			WinText += ">>";
 			WinText += str;
 			WinText += " (正在运行)";
 			SetWindowText(WinText);
@@ -2328,8 +2277,8 @@ void CcocBotDlg::OnTimer(UINT_PTR nIDEvent)
 		{
 			str = "(未运行) ";
 			WinText = "CocBot 当前版本:<<";
-			WinText += script->scriptVer;
-			WinText+= ">>";
+			WinText += cocBotVer;
+			WinText += ">>";
 			WinText += str;
 			SetWindowText(WinText);
 		}
@@ -2395,7 +2344,7 @@ void CcocBotDlg::OnScreenCapture()
 	// TODO: 在此添加控件通知处理程序代码
 	long ret = 1;
 	script->coc.SetPath(GetExePath());
-	script->coc.ScreenCapture("screem.bmp");
+	script->coc.ScreenCapture("screen.bmp");
 	if (ret)
 	{
 		WriteLog("截图成功，路径是：" + script->coc.GetPath(), 1, RGB(0x00, 0x00, 0xff), false);
@@ -2405,20 +2354,18 @@ void CcocBotDlg::OnScreenCapture()
 }
 bool CcocBotDlg::RegDm(void)
 {
-	CbotFunction* bot = new CbotFunction;
 	CString path, cmdline;
-	path = bot->GetExePath();
-	delete bot;
-
+	path = GetExePath();
 	CString cmd_line;
 	cmd_line = "regsvr32";
+	
 	cmd_line += " ";
 	cmd_line += path;
 	cmd_line += "dm.dll /s";
-
 	WinExec(cmd_line, SW_NORMAL);
 	path += "Function\\";
-	cmdline = path + "podm.dll";
+	cmdline = path;
+	cmdline += "podm.dll";
 	if (!script->CreateDm())
 	{
 
@@ -2550,3 +2497,9 @@ void CcocBotDlg::OnSetSize()
 	}
 }
 
+
+
+void CcocBotDlg::gameShow()
+{
+	
+}

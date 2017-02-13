@@ -88,4 +88,7 @@ private:
 public:
 private:
 	CString m_OldState;
+public:
+	CStatic m_Show;
+	void gameShow();
 };
