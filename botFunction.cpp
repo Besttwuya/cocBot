@@ -1,46 +1,15 @@
 ﻿#include "StdAfx.h"
-
+#include<fstream>
+#include "global.h"
 void CbotFunction::SetPath(CString _in_path)
 {
-	file_path = _in_path;
+	filePath = _in_path;
 }
-void CbotFunction::SetAllSetting(CString in_set)
-{
-	str_all_set = in_set;
-}
-CString CbotFunction::GetVersion()
-{
-	if (now_version == _T(""))
-	{
-		now_version = _T("version:3.1233");
-	}
 
-	return now_version;
-}
-unsigned int CbotFunction::IsWaitForTrainArmy()
-{
-	return 0;
-}
-unsigned int CbotFunction::GetMode()
-{
-	return 0;
-}
-unsigned int CbotFunction::IsRequestHelp()
-{
-	return 0;
-}
-void CbotFunction::SetVersion(CString in_ver)
-{
-	now_version = in_ver;
-}
-bool CbotFunction::SetSingleSetting(CString TargetName, CString Value)
-{
-	return false;
 
-}
 CString CbotFunction::GetPath()
 {
-	CString now_path = file_path;
+	CString now_path = filePath;
 	return now_path;
 }
 CString CbotFunction::GetExePath()
@@ -65,7 +34,7 @@ unsigned int CbotFunction::WriteFile(CString _in_FileName, CString _in_message)
 	{
 		return 0;
 	}
-	CFile file_log(file_path + _in_FileName, CFile::modeCreate | CFile::modeWrite);
+	CFile file_log(filePath + _in_FileName, CFile::modeCreate | CFile::modeWrite);
 	//file_log.SeekToEnd();
 	file_log.Write(_in_message, strlen(_in_message));
 	file_log.Close();
@@ -73,17 +42,17 @@ unsigned int CbotFunction::WriteFile(CString _in_FileName, CString _in_message)
 }
 CString CbotFunction::ReadFile(CString _in_FileName)
 {
-	if (!PathFileExists(file_path + _in_FileName))
+	if (!PathFileExists(filePath + _in_FileName))
 	{
-		return "Null!";
+		return "";
 	}
-	CFile File(file_path + _in_FileName, CFile::modeRead);
+	CFile File(filePath + _in_FileName, CFile::modeRead);
 	File.SeekToBegin();
 	unsigned long long length;
 	length = File.GetLength();
 	char* pbuf = new char[length + 1];
-	File.Read(pbuf, File.GetLength());
-	pbuf[File.GetLength()] = '\0';
+	File.Read(pbuf, length);
+	pbuf[length] = '\0';
 	CString result(pbuf);
 	File.Close();
 	delete pbuf;
@@ -119,39 +88,82 @@ CString CbotFunction::ReadFileWithoutPath(CString _in_PathAndFlieName)
 
 	return "";
 }
-CString CbotFunction::GetSingleSetting(CString in_need)
+CString CbotFunction::getSets(const CString& key)
 {
-	CString in_set = str_all_set;
-	CString outstr;
-	int j = 1, index = 0;
-	if (in_set.GetLength() <= 0)
-	{
-		return _T("");
-	}
-	CString needfindstr = "[" + in_need + "=";
-	int i = in_set.Find(needfindstr);
-	index = i + needfindstr.GetLength();
-	if (i >= 0)
-	{
-		for (j = 0; j <= in_set.GetLength(); j++)
-		{
-			if (in_set.Mid(index + j, 1) == "]")
-			{
-				break;
-			}
-		}
-		if (j != 0)
-		{
-			outstr = in_set.Mid(index, j);
-		}
-		else
-		{
-			outstr = _T("");
-		}
-
-	}
-	return outstr;
+	CString ret;
+	ret = m_map[key];
+	return ret;
 }
+int CbotFunction::getSetsInt(const CString& key)
+{
+	return _ttoi(m_map[key]);
+}
+
+void CbotFunction::setSetsStr(const CString& key, const CString& value)
+{
+	m_map[key] = value;
+}
+
+bool CbotFunction::LoadSets(CString file)
+{
+	using namespace std;
+	CFile f;
+	if (f.Open(file, CFile::modeRead) == FALSE)
+		return false;
+	DWORD len = f.GetLength();
+	if (len == 0)
+		return false;
+	char* buff = new char[len + 1];
+	f.Read(buff, len);
+	buff[len] = '\0';
+	vector<string>vstr,vstr2;
+	_split(buff, vstr, "\r\n");
+	int vsize = vstr.size();
+	int i;
+	for (i=0;i<vsize;i++)
+	{
+		_split(vstr[i], vstr2, "=");
+		if (vstr2.size() == 2)
+			m_map[vstr2[0].c_str()] = vstr2[1].c_str();
+		else if(vstr2.size()==1)
+			m_map[vstr2[0].c_str()] = "";
+	}
+
+	//f.open(file.GetBuffer())
+	f.Close();
+	delete[]buff;
+	return true;
+}
+
+bool CbotFunction::SaveSets(CString file)
+{
+	using namespace std;
+	map<CString, CString>::iterator it, end;
+	CFile f;
+	if (false == f.Open(file, CFile::modeCreate | CFile::modeWrite))
+		return false;
+	CString temp;
+	temp = "";
+	for (it=m_map.begin(),end=m_map.end();it!=end;it++)
+	{
+		temp += it->first;
+		temp += "=";
+		temp += it->second;
+		temp += "\r\n";
+	}
+	f.Write(temp.GetBuffer(), temp.GetLength());
+	f.Close();
+	temp.ReleaseBuffer();
+	return true;
+}
+
+void CbotFunction::setSetsInt(CString key, int value)
+{
+	CString str;
+	str.Format("%d", value);
+	m_map[key] = str;
+}
+
 unsigned int CbotFunction::Dealy(long DelayCount)
 {
 	DWORD j = GetTickCount();
@@ -166,21 +178,7 @@ unsigned int CbotFunction::Dealy(long DelayCount)
 	}
 	return 0;
 }
-unsigned int CbotFunction::SetCocVer(CString ver)
-{
-	ClashOfClans_Version = ver;
-	return 1;
-}
-CString CbotFunction::GetCocVer()
-{
-	CString version = _T("");
-	version = ClashOfClans_Version;
-	if (version == _T(""))
-	{
-		return _T("");
-	}
-	return version;
-}
+
 CString CbotFunction::GetNowTime(int type)
 {
 
@@ -207,8 +205,7 @@ CString CbotFunction::GetNowTime(int type)
 long CbotFunction::Initialize()
 {
 	tm = CTime::GetCurrentTime();
-	SearchCount = 0;
-	AttackCount = 0;
+
 	StartYear = 0;
 	StartMonth = 0;
 	StartDay = 0;
@@ -217,45 +214,10 @@ long CbotFunction::Initialize()
 	StartSecond = 0;
 	return 0;
 }
-long CbotFunction::AddSomeCount(int type, long keyvalue)
-{
-	long RValue = 0;
-	switch (type)
-	{
-	case 0:
-		SearchCount += keyvalue;
-		break;
-	case 1:
-		AttackCount += keyvalue;
 
-		break;
-	default:
-		RValue = -1;
-
-	}
-	return RValue;
-}
-long CbotFunction::GetSomeCount(int type)
-{
-	long RValue = 0;
-	switch (type)
-	{
-	case 0:
-		RValue = SearchCount;
-		break;
-	case 1:
-		RValue = AttackCount;
-
-		break;
-	default:
-		RValue = -1;
-
-	}
-	return RValue;
-}
 void CbotFunction::ScreenCapture(CString _in_file_name)
 {
-	_in_file_name = file_path + _in_file_name;//设置截图文件目录+名称
+	_in_file_name = filePath + _in_file_name;//设置截图文件目录+名称
 	CDC *pDC;//屏幕DC
 	pDC = CDC::FromHandle(GetDC(NULL));//获取当前整个屏幕DC
 	int BitPerPixel = pDC->GetDeviceCaps(BITSPIXEL);//获得颜色模式
@@ -318,82 +280,7 @@ void CbotFunction::SetStartTime()
 	StartMinute = tm.GetMinute();
 	StartSecond = tm.GetSecond();
 }
-CString CbotFunction::GetConfig(CString TargetName, CString LeftStr, CString RightStr)
-{
-	CString InfoStr;
-	InfoStr = ConfigInfo;
-	if (InfoStr.GetLength() <= 1)
-	{
-		return "";
-	}
-	CString outstr;
-	int j = 1, index = 0;
-	if (InfoStr.GetLength() <= 0)
-	{
-		return _T("");
-	}
-	CString needfindstr = LeftStr + TargetName + "=";
-	int i = InfoStr.Find(needfindstr);
-	index = i + needfindstr.GetLength();
-	if (i >= 0)
-	{
-		for (j = 0; j <= InfoStr.GetLength(); j++)
-		{
-			if (InfoStr.Mid(index + j, 1) == RightStr)
-			{
-				break;
-			}
-		}
-		if (j != 0)
-		{
-			outstr = InfoStr.Mid(index, j);
-		}
-		else
-		{
-			outstr = _T("");
-		}
 
-	}
-	return outstr;
-}
-CString CbotFunction::GetConfig(CString configStr, CString TargetName, CString LeftStr, CString RightStr)
-{
-	CString InfoStr;
-	InfoStr = configStr;
-	if (InfoStr.GetLength() <= 1)
-	{
-		return "";
-	}
-	CString outstr;
-	int j = 1, index = 0;
-	if (InfoStr.GetLength() <= 0)
-	{
-		return _T("");
-	}
-	CString needfindstr = LeftStr + TargetName + "=";
-	int i = InfoStr.Find(needfindstr);
-	index = i + needfindstr.GetLength();
-	if (i >= 0)
-	{
-		for (j = 0; j <= InfoStr.GetLength(); j++)
-		{
-			if (InfoStr.Mid(index + j, 1) == RightStr)
-			{
-				break;
-			}
-		}
-		if (j != 0)
-		{
-			outstr = InfoStr.Mid(index, j);
-		}
-		else
-		{
-			outstr = _T("");
-		}
-
-	}
-	return outstr;
-}
 bool CbotFunction::KillProcessById(DWORD pID)
 {
 
@@ -410,40 +297,44 @@ bool CbotFunction::KillProcessById(DWORD pID)
 	return ret;
 }
 
-void CbotFunction::FileSearch(CString root)
+void CbotFunction::FileSearch(CString root,CString type)
 { // root 为目录名
 	CFileFind ff;
 	CString FilePath;
-	if (root.Right(1) != "/")
-	{
-		root += "/";
-	}
-	root += "*.cbt";
+	CString FileName;
+	root += type;
+	OutputDebugStringA(root);
 	BOOL res = ff.FindFile(root);
 	while (res)
 	{
 		res = ff.FindNextFile();
+		FileName = ff.GetFileName();
 		FilePath = ff.GetFilePath();
 		if (ff.IsDirectory() && !ff.IsDots())// 找到的是文件夹
 		{
-			FileSearch(FilePath);// 递归
+			FileSearch(FilePath,type);// 递归
 		}
 		else if (!ff.IsDirectory() && !ff.IsDots())// 找到的是文件
 		{
-			SearchStr += FilePath;
-			SearchStr += "|";
+
+			if (SearchStr.GetLength()>4)
+			{
+				SearchStr += "|";
+			}
+			SearchStr += FileName;
+			
 		}
 	}
 }
-CString CbotFunction::SelectFile(CString Str)
+CString CbotFunction::SelectFile(const char* fileStr)
 {
 	//TCHAR szFilter[] = _T("配置(*.cbt)|*.cbt||");
-	if (Str.GetLength()<2)
+	if (strlen(fileStr)<4)
 	{
-		Str = _T("所有文件(*.*)|*.*||");
+		fileStr = "所有文件(*.*)|*.*||";
 	}
 	// 构造打开文件对话框   
-	CFileDialog fileDlg(TRUE, _T("txt"), NULL, 0, Str);
+	CFileDialog fileDlg(TRUE, _T("txt"), NULL, 0, fileStr);
 	CString strFilePath;
 
 	// 显示打开文件对话框   
@@ -455,26 +346,36 @@ CString CbotFunction::SelectFile(CString Str)
 	}
 	else
 	{
-		return "null!";
+		return "";
 	}
 }
-long CbotFunction::SpiltStr(char* strToken, const char* strDelimit,CString& result)
+bool CbotFunction::compareStr(const char * firstStr, const char * nextStr)
 {
-	char* pNext = NULL;
-	char* p = strtok_s(strToken, strDelimit, &pNext);
-	long maxCount = 0;
-	result = _T("");
-	while (p!=NULL)
+	int nLen1 = strlen(firstStr);
+	int nLen2 = strlen(nextStr);
+	bool ret = false;
+	if (nLen1!=nLen2)
 	{
-		result += p;
-		p = strtok_s(NULL, strDelimit, &pNext);
-		maxCount++;
+		return false;
 	}
-	return maxCount;
+	for (int i=0;i<nLen1;i++)
+	{
+		if (firstStr[i]==nextStr[i])
+		{
+			ret = true;
+		}
+		else
+		{
+			ret = false;
+			break;
+		}
+	}
+	return ret;
 }
 
+
 //**************** Detail ******************//
-Detail::Detail()
+CGameInfo::CGameInfo()
 {
 	IsFirstRecord = true;
 	IsRecordSuccess = false;
@@ -485,7 +386,7 @@ Detail::Detail()
 	StartDarkElixir = 0;
 	ArmyRet = 0;
 }
-void Detail::InitlizeDetail()
+void CGameInfo::InitlizeDetail()
 {
 	IsFirstRecord = true;
 	IsRecordSuccess = false;
@@ -496,7 +397,7 @@ void Detail::InitlizeDetail()
 	StartDarkElixir = 0;
 	ArmyRet = 0;
 }
-long Detail::SetStartResource(long _in_StartGold, long _in_StartElixir, long _in_StartDarkElixir, long _in_StartTroophs)
+long CGameInfo::SetStartResource(long _in_StartGold, long _in_StartElixir, long _in_StartDarkElixir, long _in_StartTroophs)
 {
 	CString strDay, strH;
 	CTime tm;
@@ -532,7 +433,7 @@ long Detail::SetStartResource(long _in_StartGold, long _in_StartElixir, long _in
 
 	return 1;
 }
-long Detail::SetNowResource(long _in_NowGold, long _in_NowElixir, long _in_NowDarkElixir, long _in_NowTroophs)
+long CGameInfo::SetNowResource(long _in_NowGold, long _in_NowElixir, long _in_NowDarkElixir, long _in_NowTroophs)
 {
 	NowGold = _in_NowGold;
 	NowElixir = _in_NowElixir;
@@ -557,24 +458,26 @@ long Detail::SetNowResource(long _in_NowGold, long _in_NowElixir, long _in_NowDa
 	}
 	return 0;
 }
-long Detail::GetLootGold()
+long CGameInfo::GetLootGold()
 {
 	return LootGold;
 }
-long Detail::GetLootElixir()
+long CGameInfo::GetLootElixir()
 {
 	return LootElixir;
 }
-long Detail::GetLootDarkElixir()
+long CGameInfo::GetLootDarkElixir()
 {
 	return LootDarkElixir;
 }
-long Detail::GetLootTroophs()
+long CGameInfo::GetLootTroophs()
 {
 	return LootTroophs;
 }
-long Detail::GetRunTime()
+long CGameInfo::GetRunTime()
 {
 	return RunTime;
 }
+
+
 

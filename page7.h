@@ -35,15 +35,16 @@ public:
 	// SwitchMode
 	// SwitchMode
 	afx_msg void OnDisableSetWindowSize();
-	// DisableSetWindowSize
-	CButton DisableSetWindowSize;
-	afx_msg void OnBindWindowSet();
+
 public:
-	bool IsShowBindSetWindow;
 	afx_msg void OnOpen1();
 	CEdit m_edit1;
 	CListCtrl m_list1;
 	afx_msg void OnAdd();
 	CComboBox Clear;
 	afx_msg void OnClear();
+	afx_msg void OnPaint();
+	afx_msg void OnBnClickedSelectPath();
+	CString app_player_path;
+	afx_msg void OnBnClickedShowGraphic();
 };

@@ -59,4 +59,7 @@ public:
 	// KeyWordToDonate
 	CComboBox KeyWordToDonate;
 	CComboBox InputKeyWord;
+	afx_msg void OnPaint();
+	CEdit requestWords;
+	CButton IsChangeWords;
 };

@@ -24,4 +24,6 @@ public:
 	
 	CStatic Instruction;
 	afx_msg void OnDownload();
+	//CString m_Web;
+	afx_msg void OnPaint();
 };
