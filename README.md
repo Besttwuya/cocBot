@@ -1,5 +1,25 @@
-# cocBot
-cocBot Project
+
+====模块功能========类名============文件名
+1.程序入口			CcocBotApp		cocBot.h，cocBot.cpp
+2.UI				CcocBotDlg		cocBot.h,cocBot.cpp
+3.UI				page1			page1.h,page1.cpp
+4.UI				page2			page2.h,page2.cpp
+5.UI				page3			page3.h,page3.cpp
+6.UI				page4			page4.h,page4.cpp
+7.UI				page5			page5.h,page5.cpp
+8.UI				page6			page6.h,page6.cpp
+9.UI				page7			page7.h,page7.cpp
+10.UI				page8			page8.h,page8.cpp
+11.UI				page9			page9.h,page9.cpp
+12.UI				page10			page10.h,page10.cpp
+全局变量			NULL			global.h,global.cpp,const.h
+脚本模块			CbotFunction	botFunction.h,botFunction.cpp
+脚本模块			CScript			Script.h,Script.cpp
+lua 模块			NULL			lua_func.h,lua_func.cpp
+Kernal-pipe			CPipeShell		pipeshell.h,pipeshell.cpp
+Kernal-imageloc		Cdmsoft			Cdmsoft.h,botLib.h
+Kernal-other		NULL			botHelp.h,botHelp.cpp
+		
 ================================================================================
 MICROSOFT 基础类库: newcocbot 项目概述
 ===============================================================================
