@@ -25,7 +25,6 @@ public:
 	CStatic RunTime;
 	CStatic AttackCount;
 	CStatic SearchCount;
-	// NowLog
-	CStatic NowLog;
 	CStatic m_ThreadCount;
+	afx_msg void OnPaint();
 };

@@ -11,8 +11,8 @@
 #include "resource.h"		// 主符号
 
 
-// CnewcocbotApp:
-// 有关此类的实现，请参阅 newcocbot.cpp
+// CcocBotApp:
+// 有关此类的实现，请参阅 cocBot.cpp
 //
 
 class CcocBotApp : public CWinApp
@@ -29,6 +29,10 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 	int ExitInstance();
+	/*注册插件*/
+	bool RegistryDll(const char* szDllPath);
+	/*破解*/
+	int CrackDm(const char* crackDllName);
 };
 
 extern CcocBotApp theApp;

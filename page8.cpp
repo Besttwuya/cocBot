@@ -28,13 +28,25 @@ void page8::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RunTime, RunTime);
 	DDX_Control(pDX, IDC_AttackCount, AttackCount);
 	DDX_Control(pDX, IDC_SearchCount, SearchCount);
-	DDX_Control(pDX, IDC_NowLog, NowLog);
 	DDX_Control(pDX, IDC_THREADCOUNT, m_ThreadCount);
 }
 
 
 BEGIN_MESSAGE_MAP(page8, CDialog)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
 // page8 消息处理程序
+
+
+void page8::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 在此处添加消息处理程序代码
+					   // 不为绘图消息调用 CDialog::OnPaint()
+	/*CRect rect;
+	GetClientRect(rect);
+	dc.FillSolidRect(rect, RGB(0Xc0, 0Xc0, 0Xc0));
+	dc.FillPath();*/
+}

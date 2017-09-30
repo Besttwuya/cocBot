@@ -84,4 +84,5 @@ public:
 	afx_msg void OnEnChangeEdit17();
 	afx_msg void OnEnChangeEdit18();
 	afx_msg void OnEnChangeEdit19();
+	afx_msg void OnPaint();
 };

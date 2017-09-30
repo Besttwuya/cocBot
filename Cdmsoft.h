@@ -1,6 +1,6 @@
 // 从类型库向导中用“添加类”创建的计算机生成的 IDispatch 包装类
 
-#import "E:\clashofclans\newcocbot\newcocbot\dm.dll" no_namespace
+#import "E:\clashofclans\cocBot_Project\newcocbot\dm.dll" no_namespace
 // Cdmsoft 包装类
 
 class Cdmsoft : public COleDispatchDriver

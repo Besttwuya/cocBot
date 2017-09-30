@@ -56,12 +56,15 @@ void page5::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, ListKeyWord);
 	DDX_Control(pDX, IDC_COMBO2, KeyWordToDonate);
 	DDX_Control(pDX, IDC_COMBO3, InputKeyWord);
+	DDX_Control(pDX, IDC_REQUEST_WORDS, requestWords);
+	DDX_Control(pDX, IDC_CHECK26, IsChangeWords);
 }
 
 
 BEGIN_MESSAGE_MAP(page5, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &page5::OnAddKeyWord)
 	ON_BN_CLICKED(IDC_BUTTON2, &page5::OnClearKeyWord)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -73,32 +76,39 @@ END_MESSAGE_MAP()
 void page5::OnAddKeyWord()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CString Input_str;
+	CString Input_str,keyStr;
 	InputKeyWord.GetWindowText(Input_str);
-	for (int i=0;i<=30;i++)
+	int index = KeyWordToDonate.GetCurSel();
+	keyStr = ListKeyWord.GetItemText(index, 1);
+	if (keyStr.Find(Input_str)<0)
 	{
-		if (ListKeyWord.GetItemText(i,1).GetLength()<=0)
+		if (keyStr.GetLength()>0)
 		{
-			ListKeyWord.SetItemText(i,1,Input_str);
-			
-			KeyWordToDonate.GetWindowTextA(Input_str);
-			ListKeyWord.SetItemText(i,2,Input_str);
-			ListKeyWord.SetTextBkColor(RGB(0X00,0XFF,0X00));
-			ListKeyWord.SetTextColor(RGB(0X00,0X00,0XFF));
-			ListKeyWord.SetBkColor(RGB(0XFF,0X00,0XFF));
-			break;
+			keyStr += ",";
 		}
+		
+		keyStr += Input_str;
+		ListKeyWord.SetItemText(index, 1, keyStr);
 	}
-	CBrush brush;
+	
+	
 }
 
 
 void page5::OnClearKeyWord()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	for (int i=0;i<=30;i++)
+	for (int i=0;i<21;i++)
 	{
 		ListKeyWord.SetItemText(i,1,"");
-		ListKeyWord.SetItemText(i,2,"");
+		//ListKeyWord.SetItemText(i,2,"");
 	}
+}
+
+
+void page5::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 在此处添加消息处理程序代码
+					   // 不为绘图消息调用 CDialogEx::OnPaint()
 }

@@ -5,7 +5,7 @@
 
 // page1 对话框
 
-class page1 : public CDialog
+class page1 : public CDialogEx
 {
 	DECLARE_DYNAMIC(page1)
 
@@ -21,10 +21,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	// xuke
-	CEdit license;
-	// 模拟器
-	CComboBox BluestacksOrOthers;
+	
 	// 游戏区服
 	CComboBox GameVersion;
 	CButton OffLine;
@@ -37,18 +34,22 @@ public:
 	CButton LightingDarkElixir;
 	CButton RemoveTree;
 	CButton RearmAll;
-	CComboBox QuickSet;
-	CEdit QuickSetShow;
 	CEdit LoadOutSet;
 	
-	CComboBox ServerPort;
+	
 	afx_msg void OnBsOrOtherChange();
-	CEdit BsOrOtherWindowText;
-	CComboBox BsOrOtherNo;
 	afx_msg void OnLoadInConfig();
-	bool IsLoadInConfig;
-	bool IsLoadOutConfig;
 	afx_msg void OnLoadOutConfig();
 	CEdit LoadInSet;
 	afx_msg void OnSelectFile();
+	afx_msg void OnPaint();
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedBtQuickset();
+	HWND hParent;//父窗口句柄
+	CComboBox townLevel;
+	CButton check_bs;
+	afx_msg void OnBnClickedCheckBs();
+	afx_msg void OnBnClickedCheckLd();
+	BOOL app_player_type;
+	CListBox m_list;
 };

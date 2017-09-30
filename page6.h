@@ -26,4 +26,5 @@ public:
 	CComboBox UpgradeWallLevel;
 	CEdit UpgradeHeroMinDarkElixir;
 	CComboBox UpgradeHeroType;
+	afx_msg void OnPaint();
 };

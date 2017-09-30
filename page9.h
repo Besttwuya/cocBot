@@ -24,4 +24,6 @@ public:
 	CRichEditCtrl m_RichEdit1;
 
 	CProgressCtrl m_progress;
+	afx_msg void OnPaint();
+	CButton m_notShowLog;
 };

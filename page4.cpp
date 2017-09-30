@@ -1,4 +1,4 @@
-// page4.cpp : å®ç°æ–‡ä»¶
+// page4.cpp : ÊµÏÖÎÄ¼ş
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// page4 å¯¹è¯æ¡†
+// page4 ¶Ô»°¿ò
 
 IMPLEMENT_DYNAMIC(page4, CDialogEx)
 
@@ -37,14 +37,29 @@ void page4::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO4, UseLightingCount);
 	DDX_Control(pDX, IDC_COMBO5, AttackSpeed);
 	DDX_Control(pDX, IDC_COMBO6, attackCount);
+	DDX_Control(pDX, IDC_ATTACKGRAD, AttackGird);
+	DDX_Control(pDX, IDC_LUA_LIST, m_lua_list);
 }
 
 
 BEGIN_MESSAGE_MAP(page4, CDialogEx)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
-// page4 æ¶ˆæ¯å¤„ç†ç¨‹åº
+// page4 ÏûÏ¢´¦Àí³ÌĞò
 
 
 
+
+
+void page4::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
+					   // ²»Îª»æÍ¼ÏûÏ¢µ÷ÓÃ CDialogEx::OnPaint()
+	/*CRect rect;
+	GetClientRect(rect);
+	dc.FillSolidRect(rect, RGB(0Xc0, 0Xc0, 0Xc0));
+	dc.FillPath();*/
+}

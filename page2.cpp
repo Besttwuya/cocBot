@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(page2, CDialog)
 	ON_EN_CHANGE(IDC_EDIT17, &page2::OnEnChangeEdit17)
 	ON_EN_CHANGE(IDC_EDIT18, &page2::OnEnChangeEdit18)
 	ON_EN_CHANGE(IDC_EDIT19, &page2::OnEnChangeEdit19)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -365,4 +366,16 @@ void page2::OnEnChangeEdit19()
 
 	// TODO:  在此添加控件通知处理程序代码
 	TotalInput();
+}
+
+
+void page2::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 在此处添加消息处理程序代码
+					   // 不为绘图消息调用 CDialog::OnPaint()
+	//CRect rect;
+	//GetClientRect(rect);
+	//dc.FillSolidRect(rect, RGB(0Xc0, 0Xc0, 0Xc0));
+	//dc.FillPath();
 }

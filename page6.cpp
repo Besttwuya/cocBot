@@ -34,7 +34,20 @@ void page6::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(page6, CDialogEx)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
 // page6 消息处理程序
+
+
+void page6::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 在此处添加消息处理程序代码
+					   // 不为绘图消息调用 CDialogEx::OnPaint()
+	/*CRect rect;
+	GetClientRect(rect);
+	dc.FillSolidRect(rect, RGB(0Xc0, 0Xc0, 0Xc0));
+	dc.FillPath();*/
+}
